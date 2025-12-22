@@ -8,7 +8,7 @@ body {
 }
 
 /* Headings */
-h1, h2 {
+h1, h2, h3 {
   text-align: center;
   color: #f5f5f5;
   margin-bottom: 10px;
@@ -21,7 +21,7 @@ h1, h2 {
   font-size: 1.1em;
 }
 
-/* Container */
+/* Main Container */
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +35,8 @@ h1, h2 {
   background-color: #2c2c2c;
   padding: 25px;
   border-radius: 12px;
-  width: 320px;
+  width: 90%;
+  max-width: 900px; /* wide enough for two columns */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -45,14 +46,41 @@ h1, h2 {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Form Elements */
-label {
+/* Inputs Columns Flex */
+.inputs-columns {
+  display: flex;
+  gap: 30px;           /* space between material and geometry columns */
+  flex-wrap: wrap;      /* stack on small screens */
+  justify-content: space-between;
+}
+
+/* Individual Column Panels */
+.material-inputs,
+.geometry-inputs {
+  flex: 1;
+  min-width: 260px;     /* ensures columns don’t shrink too much */
+  background-color: #2c2c2c;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Column Headings */
+.material-inputs h3,
+.geometry-inputs h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Labels */
+.material-inputs label,
+.geometry-inputs label {
   display: block;
-  margin-top: 15px;
+  margin-top: 10px;
   font-weight: 500;
   color: #d0d0d0;
 }
 
+/* Inputs and Selects */
 input, select {
   width: 100%;
   padding: 8px;
@@ -71,7 +99,7 @@ input:focus, select:focus {
   background-color: #3a3a3a;
 }
 
-/* Button */
+/* Buttons */
 button {
   width: 100%;
   margin-top: 20px;
@@ -99,14 +127,59 @@ button:hover {
   text-align: center;
 }
 
-/* Parametric Study Canvas */
-canvas#chart {
-  display: block;
-  margin: 20px auto;
-  background-color: #2c2c2c;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+.parametric-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 30px;
 }
+
+/* Controls Panel */
+.parametric-controls {
+  flex: 1;
+  min-width: 280px;
+  max-width: 320px;
+  background-color: #2c2c2c;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.parametric-controls h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Range Inputs */
+.param-range {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.param-range div {
+  flex: 1;
+}
+
+/* Chart Panel */
+.parametric-chart {
+  flex: 2;
+  min-width: 320px;
+  background-color: #2c2c2c;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Make the canvas fill the chart panel */
+.parametric-chart canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
+
+
 
 /* Footer */
 footer {
@@ -123,4 +196,11 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 700px) {
+  .inputs-columns {
+    flex-direction: column; /* stack columns on small screens */
+  }
 }

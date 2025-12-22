@@ -2,8 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Plastic Snap-Fit Design Calculator</title>
+  <title>Plastic Snap-Fit Design Calculator | Rectangular Cross-Section Tool</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Free online plastic snap-fit design calculator for rectangular cross-section profiles. Quickly compute cantilever length, thickness, width, and allowable strain for your snap-fit parts." />
+  <meta name="keywords" content="snap fit calculator, plastic snap fit design, rectangular cross section, cantilever snap fit, mechanical design tool, Bayer snap fit" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Kris Scheiblich" />
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="Plastic Snap-Fit Design Calculator" />
+  <meta property="og:description" content="Calculate and optimize your plastic snap-fit designs with this free tool. Supports rectangular cross-sections and more coming soon." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://username.github.io/snap-fit-calculator/" />
+  <meta property="og:image" content="https://username.github.io/snap-fit-calculator/og-image.png" />
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HN1G7V18X9"></script>
@@ -18,50 +30,123 @@
 </head>
 <body>
 
-<h1>Plastic Snap-Fit Design Calculator</h1>
-<p class="subtitle">Analytical sizing tool based on Bayer Snap-Fit Design</p>
+<header>
+  <h1>Plastic Snap-Fit Design Calculator</h1>
+  <p class="subtitle">Analytical sizing tool based on Bayer Snap-Fit Design | Currently supports rectangular cross-section profiles</p>
+</header>
 
-<div class="container">
-  <div class="inputs">
-    <h2>Inputs</h2>
+<main class="container">
+  <section class="inputs">
+  <h2>Calculator Inputs</h2>
+  <form>
+    <div class="inputs-columns">
 
-    <label>Profile</label>
-    <select id="profile"></select>
+      <!-- Material Inputs -->
+      <div class="material-inputs">
+        <h3>Material Properties</h3>
+        <label for="material">Material</label>
+        <select id="material"></select>
+        <label for="E">Elastic Modulus (psi)</label>
+        <input type="number" id="E" value="300000">
+        <label for="eps">Allowable Strain ε</label>
+        <input type="number" id="eps" step="0.001" value="0.02">
+        <label for="mu">Coefficient of Friction μ</label>
+        <input type="number" id="mu" step="0.01" value="0.30">
+         <button type="button" onclick="saveCurrentMaterial()">Save as Custom Material</button>
+        <p style="font-size: 0.75em; color: #aaa; margin-top: 6px;">
+          Default Material properties are based off nominal matweb values. Verify with supplier data. Add a custom material by 
+          inputting custom properties and selecting "Save as Custom Material".
+        </p>
+        <button id="clear-custom">Remove Custom Materials</button>
+        <p style="font-size: 0.75em; color: #aaa; margin-top: 6px;">
+          Removes all custom material entries from dropdown menu.
+        </p>
+        
+      </div>
 
-    <label>Elastic Modulus (psi)</label>
-    <input type="number" id="E" value="300000">
+      <!-- Geometry Inputs -->
+      <div class="geometry-inputs">
+        <h3>Snap Fit Geometry</h3>
+        <label for="profile">Profile</label>
+        <select id="profile"></select>
+        <label for="L">Cantilever Length L (in)</label>
+        <input type="number" id="L" value="1.0">
+        <label for="h">Thickness h (in)</label>
+        <input type="number" id="h" value="0.10">
+        <label for="b">Width b (in)</label>
+        <input type="number" id="b" value="0.50">
+        <label for="alpha">Lead-in Angle α (deg)</label>
+        <input type="number" id="alpha" value="5">
+        <label for="fos">Factor of Safety:</label>
+        <input type="number" id="fos" value="1.5" step="0.1" min="1">
 
-    <label>Allowable Strain ε</label>
-    <input type="number" id="eps" step="0.001" value="0.02">
+      </div>
 
-    <label>Coefficient of Friction μ</label>
-    <input type="number" id="mu" step="0.01" value="0.30">
+    </div>
 
-    <label>Lead-in Angle α (deg)</label>
-    <input type="number" id="alpha" value="5">
+    <button type="button" onclick="runCalculation()">Calculate</button>
+     </form>
+    </section>
 
-    <label>Cantilever Length L (in)</label>
-    <input type="number" id="L" value="1.0">
 
-    <label>Thickness h (in)</label>
-    <input type="number" id="h" value="0.10">
 
-    <label>Width b (in)</label>
-    <input type="number" id="b" value="0.50">
-
-    <button onclick="runCalculation()">Calculate</button>
-  </div>
-
-  <div class="outputs">
-    <h2>Outputs</h2>
-    <div id="results"></div>
-  </div>
-</div>
+  <section class="outputs">
+    <h2>Calculator Outputs</h2>
+    <div id="results" aria-live="polite"></div>
+  </section>
+</main>
 
 <hr>
 
-<h2>Parametric Study</h2>
-<canvas id="chart" width="700" height="350"></canvas>
+<section>
+  <h2>Parametric Study</h2>
+ 
+    <section class="parametric-container">
+  <div class="parametric-controls">
+    <h3>Parametric Study Settings</h3>
+
+    <label for="param-var">Vary Parameter:</label>
+    <select id="param-var">
+      <option value="h">Thickness h (in)</option>
+      <option value="b">Width b (in)</option>
+      <option value="L">Cantilever Length L (in)</option>
+      <option value="E">Elastic Modulus E (psi)</option>
+      <option value="eps">Allowable Strain ε</option>
+      <option value="mu">Coefficient of Friction μ</option>
+      <option value="alpha">Lead-in Angle α (deg)</option>
+    </select>
+
+    <div class="param-range">
+      <div>
+        <label for="param-start">Start</label>
+        <input type="number" id="param-start" step="any">
+      </div>
+      <div>
+        <label for="param-end">End</label>
+        <input type="number" id="param-end" step="any">
+      </div>
+      <div>
+        <label for="param-step">Step</label>
+        <input type="number" id="param-step" step="any">
+      </div>
+    </div>
+
+    <button type="button" onclick="updateChartFromInputs()">Update Chart</button>
+  <p style="font-size: 0.85em; color: #aaa; margin-top: 6px;">
+    Automatic Values are defined as 20% above and below the value inputted in the Calculator Inputs. Chart increments every 5%.
+</p>
+</div>
+ 
+  <div class="parametric-chart">
+    <!-- Remove width/height attributes -->
+    <canvas id="chart"></canvas>
+  </div>
+</section>
+</section>
+
+<footer>
+  <p>Snap-Fit Calculator by Kris Scheiblich | <a href="https://github.com/username/snap-fit-calculator">View on GitHub</a></p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="app.js"></script>
